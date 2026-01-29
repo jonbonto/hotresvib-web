@@ -21,6 +21,7 @@ export function RoomList({ hotelId }: RoomListProps) {
       hotelId,
       checkInDate: checkIn || undefined,
       checkOutDate: checkOut || undefined,
+      available: true,
     }),
   });
 

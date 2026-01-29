@@ -57,15 +57,15 @@ export default function ConfirmationClient() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Check-in</span>
-              <span>{format(new Date(reservation.checkInDate), 'EEEE, MMMM dd, yyyy')}</span>
+              <span>{format(new Date(reservation.checkInDate ?? reservation.startDate!), 'EEEE, MMMM dd, yyyy')}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Check-out</span>
-              <span>{format(new Date(reservation.checkOutDate), 'EEEE, MMMM dd, yyyy')}</span>
+              <span>{format(new Date(reservation.checkOutDate ?? reservation.endDate!), 'EEEE, MMMM dd, yyyy')}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Guests</span>
-              <span>{reservation.guestCount}</span>
+              <span>{reservation.guestCount ?? 1}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Status</span>

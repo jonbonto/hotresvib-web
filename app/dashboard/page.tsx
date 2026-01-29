@@ -24,8 +24,8 @@ export default function DashboardPage() {
   }, [isAuthenticated, router]);
 
   const { data: reservations, isLoading, refetch } = useQuery({
-    queryKey: ['user-reservations'],
-    queryFn: () => getUserReservations(user!.id),
+    queryKey: ['user-reservations', user?.id],
+    queryFn: () => getUserReservations(user?.id),
     enabled: isAuthenticated && !!user,
   });
 
@@ -76,13 +76,13 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         <span>
-                          {format(new Date(reservation.checkInDate), 'MMM dd')} -{' '}
-                          {format(new Date(reservation.checkOutDate), 'MMM dd, yyyy')}
-                        </span>
+                            {format(new Date(reservation.checkInDate ?? reservation.startDate!), 'MMM dd')} -{' '}
+                            {format(new Date(reservation.checkOutDate ?? reservation.endDate!), 'MMM dd, yyyy')}
+                          </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        <span>{reservation.guestCount} guests</span>
+                        <span>{reservation.guestCount ?? 1} guests</span>
                       </div>
                     </div>
                   </div>

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getHotel } from '@/lib/api/hotels';
+import type { Hotel } from '@/lib/types/hotel';
 import { RoomList } from '@/components/RoomList';
 import { MapPin, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -7,15 +8,18 @@ import { Badge } from '@/components/ui/badge';
 export default async function HotelDetailsPage({
   params,
 }: {
-  params: { hotelId: string };
+  params: Promise<{ hotelId: string }>;
 }) {
-  let hotel;
-  
+  const { hotelId } = await params;
+  let hotel: Hotel | null = null;
+
   try {
-    hotel = await getHotel(params.hotelId);
+    hotel = await getHotel(hotelId);
   } catch (error) {
     notFound();
   }
+
+  if (!hotel) notFound();
 
   return (
     <div className="min-h-screen">
@@ -80,7 +84,7 @@ export default async function HotelDetailsPage({
         {/* Rooms Section */}
         <div>
           <h2 className="text-3xl font-bold mb-6">Available Rooms</h2>
-          <RoomList hotelId={params.hotelId} />
+          <RoomList hotelId={hotelId} />
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/hotels" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#search" className="text-muted-foreground hover:text-foreground">
                   Search Hotels
                 </Link>
               </li>

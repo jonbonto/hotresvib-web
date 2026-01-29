@@ -46,8 +46,9 @@ export async function searchRooms(criteria: RoomSearchCriteria): Promise<Paginat
   if (criteria.type) params.append('type', criteria.type);
   if (criteria.minPrice) params.append('minPrice', criteria.minPrice.toString());
   if (criteria.maxPrice) params.append('maxPrice', criteria.maxPrice.toString());
-  if (criteria.checkInDate) params.append('checkInDate', criteria.checkInDate);
-  if (criteria.checkOutDate) params.append('checkOutDate', criteria.checkOutDate);
+  if (criteria.checkInDate) params.append('checkIn', criteria.checkInDate);
+  if (criteria.checkOutDate) params.append('checkOut', criteria.checkOutDate);
+  if (criteria.available !== undefined) params.append('available', criteria.available.toString());
   if (criteria.page !== undefined) params.append('page', criteria.page.toString());
   if (criteria.size) params.append('size', criteria.size.toString());
 

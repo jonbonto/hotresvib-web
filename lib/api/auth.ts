@@ -24,8 +24,8 @@ export async function getCurrentUser(): Promise<User> {
   return fetcher<User>('/users/me');
 }
 
-export async function refreshToken(): Promise<{ token: string }> {
-  return fetcher<{ token: string }>('/auth/refresh', {
+export async function refreshToken(): Promise<{ accessToken: string }> {
+  return fetcher<{ accessToken: string }>('/auth/refresh', {
     method: 'POST',
   });
 }

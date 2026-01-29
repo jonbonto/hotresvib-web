@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (data: LoginRequest) => {
     try {
       const response = await authApi.login(data);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.accessToken ?? '');
       setUser(response.user);
       toast.success('Logged in successfully!');
     } catch (error) {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterRequest) => {
     try {
       const response = await authApi.register(data);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.accessToken ?? '');
       setUser(response.user);
       toast.success('Account created successfully!');
     } catch (error) {

@@ -1,14 +1,23 @@
+"use client";
+
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Hotel } from '@/lib/types/hotel';
 import Link from 'next/link';
 import { MapPin, Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface HotelCardProps {
   hotel: Hotel;
 }
 
 export function HotelCard({ hotel }: HotelCardProps) {
+  const [href, setHref] = useState<string>(`/hotels/${hotel.id}`);
+
+  useEffect(() => {
+    const params = typeof window !== 'undefined' ? window.location.search : '';
+    setHref(params ? `/hotels/${hotel.id}${params}` : `/hotels/${hotel.id}`);
+  }, [hotel.id]);
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="aspect-video bg-muted relative">
@@ -44,7 +53,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
       </CardContent>
       
       <CardFooter className="p-4 pt-0">
-        <Link href={`/hotels/${hotel.id}`} className="w-full">
+        <Link href={href} className="w-full">
           <Button className="w-full" variant="outline">
             View Details
           </Button>

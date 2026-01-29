@@ -19,8 +19,9 @@ export async function getReservation(id: string): Promise<Reservation> {
   return fetcher<Reservation>(`/reservations/${id}`);
 }
 
-export async function getUserReservations(userId: string): Promise<Reservation[]> {
-  return fetcher<Reservation[]>(`/reservations/user/${userId}`);
+export async function getUserReservations(userId?: string): Promise<Reservation[]> {
+  const url = userId ? `/reservations?userId=${encodeURIComponent(userId)}` : '/reservations';
+  return fetcher<Reservation[]>(url);
 }
 
 export async function cancelReservation(id: string): Promise<void> {

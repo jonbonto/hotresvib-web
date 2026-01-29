@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { getRoomById } from '@/lib/api/hotels';
 import { BookingForm } from '@/components/BookingForm';
@@ -10,31 +10,38 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Bed, Calendar } from 'lucide-react';
 
-export default function RoomBookingPage({
-  params,
-}: {
-  params: { hotelId: string; roomId: string };
-}) {
+export default function RoomBookingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const params = useParams();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const checkIn = searchParams.get('checkIn') || '';
-  const checkOut = searchParams.get('checkOut') || '';
+  const checkIn = searchParams?.get('checkIn') || '';
+  const checkOut = searchParams?.get('checkOut') || '';
+  const hotelId = params?.hotelId as string | undefined;
+  const roomId = params?.roomId as string | undefined;
 
   useEffect(() => {
+    // Wait until auth state is resolved before deciding to redirect
+    if (authLoading) return;
+
     if (!isAuthenticated) {
-      router.push(`/auth/login?redirect=/hotels/${params.hotelId}/rooms/${params.roomId}?checkIn=${checkIn}&checkOut=${checkOut}`);
+      const redirect = `/hotels/${hotelId ?? ''}/rooms/${roomId ?? ''}?checkIn=${checkIn}&checkOut=${checkOut}`;
+      router.push(`/auth/login?redirect=${encodeURIComponent(redirect)}`);
       return;
     }
 
-    getRoomById(params.roomId)
+    if (!roomId) {
+      setLoading(false);
+      return;
+    }
+
+    getRoomById(roomId)
       .then(setRoom)
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [isAuthenticated, params.roomId, params.hotelId, checkIn, checkOut, router]);
+  }, [authLoading, isAuthenticated, roomId, hotelId, checkIn, checkOut, router]);
 
   if (loading) {
     return (
@@ -122,8 +129,8 @@ export default function RoomBookingPage({
             </CardHeader>
             <CardContent>
               <BookingForm
-                roomId={params.roomId}
-                hotelId={params.hotelId}
+                roomId={roomId ?? ''}
+                hotelId={hotelId ?? ''}
                 defaultCheckIn={checkIn}
                 defaultCheckOut={checkOut}
                 baseRate={room.baseRate}

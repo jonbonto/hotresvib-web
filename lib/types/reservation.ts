@@ -10,9 +10,12 @@ export interface Reservation {
   id: string;
   userId: string;
   roomId: string;
-  checkInDate: string;
-  checkOutDate: string;
-  guestCount: number;
+  // API may return either `checkInDate`/`checkOutDate` or `startDate`/`endDate`
+  checkInDate?: string;
+  checkOutDate?: string;
+  startDate?: string;
+  endDate?: string;
+  guestCount?: number;
   status: ReservationStatus;
   totalPrice: number;
   currency: string;

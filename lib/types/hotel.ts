@@ -66,6 +66,7 @@ export interface RoomSearchCriteria {
   type?: string;
   minPrice?: number;
   maxPrice?: number;
+  available?: boolean;
   checkInDate?: string;
   checkOutDate?: string;
   page?: number;

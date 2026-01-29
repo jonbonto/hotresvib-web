@@ -27,7 +27,7 @@ export default async function HomePage() {
             </p>
           </div>
           
-          <div className="flex justify-center">
+          <div id="search" className="flex justify-center">
             <SearchForm />
           </div>
         </div>
