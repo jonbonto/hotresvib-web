@@ -7,12 +7,12 @@ import { Badge } from '@/components/ui/badge';
 export default async function HotelDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: { hotelId: string };
 }) {
   let hotel;
   
   try {
-    hotel = await getHotel(params.id);
+    hotel = await getHotel(params.hotelId);
   } catch (error) {
     notFound();
   }
@@ -80,7 +80,7 @@ export default async function HotelDetailsPage({
         {/* Rooms Section */}
         <div>
           <h2 className="text-3xl font-bold mb-6">Available Rooms</h2>
-          <RoomList hotelId={params.id} />
+          <RoomList hotelId={params.hotelId} />
         </div>
       </div>
     </div>

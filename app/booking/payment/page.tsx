@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { PaymentForm } from '@/components/PaymentForm';
@@ -15,26 +15,31 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 
 export default function PaymentPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const reservationId = searchParams.get('reservationId');
+  const [reservationId, setReservationId] = useState<string | null>(null);
 
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!reservationId) {
+    // Read search params from the browser URL to avoid using `useSearchParams`
+    // during prerender which can cause Suspense-related build errors.
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('reservationId');
+    setReservationId(id);
+
+    if (!id) {
       router.push('/');
       return;
     }
 
-    getReservation(reservationId)
+    getReservation(id)
       .then(setReservation)
       .catch((error) => {
         console.error('Failed to load reservation:', error);
         router.push('/');
       })
       .finally(() => setLoading(false));
-  }, [reservationId, router]);
+  }, [router]);
 
   if (loading) {
     return (

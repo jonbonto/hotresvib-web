@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { searchHotels } from '@/lib/api/hotels';
 import { HotelCard } from '@/components/HotelCard';
@@ -8,13 +8,22 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HotelsPage() {
-  const searchParams = useSearchParams();
-  
-  const city = searchParams.get('city') || '';
-  const checkIn = searchParams.get('checkIn') || '';
-  const checkOut = searchParams.get('checkOut') || '';
-  const guests = searchParams.get('guests') || '';
-  const page = parseInt(searchParams.get('page') || '0');
+  const [city, setCity] = useState('');
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
+  const [guests, setGuests] = useState('');
+  const [page, setPage] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setCity(params.get('city') || '');
+    setCheckIn(params.get('checkIn') || '');
+    setCheckOut(params.get('checkOut') || '');
+    setGuests(params.get('guests') || '');
+    setPage(parseInt(params.get('page') || '0') || 0);
+    setReady(true);
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['hotels', city, checkIn, checkOut, guests, page],
@@ -25,7 +34,7 @@ export default function HotelsPage() {
       page,
       size: 12 
     }),
-    enabled: !!city,
+    enabled: ready && !!city,
   });
 
   if (!city) {
@@ -82,7 +91,7 @@ export default function HotelsPage() {
                     variant="outline"
                     disabled={page === 0}
                     onClick={() => {
-                      const newParams = new URLSearchParams(searchParams.toString());
+                      const newParams = new URLSearchParams(window.location.search);
                       newParams.set('page', (page - 1).toString());
                       window.location.href = `/hotels?${newParams.toString()}`;
                     }}
@@ -96,7 +105,7 @@ export default function HotelsPage() {
                     variant="outline"
                     disabled={page >= data.totalPages - 1}
                     onClick={() => {
-                      const newParams = new URLSearchParams(searchParams.toString());
+                      const newParams = new URLSearchParams(window.location.search);
                       newParams.set('page', (page + 1).toString());
                       window.location.href = `/hotels?${newParams.toString()}`;
                     }}
