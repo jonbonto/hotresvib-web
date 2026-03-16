@@ -15,6 +15,12 @@ export default function ProfilePage() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [formData, setFormData] = useState({
+    displayName: '',
+    email: '',
+  });
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -22,13 +28,18 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated, router]);
 
-  const [formData, setFormData] = useState({
-    displayName: user?.displayName || '',
-    email: user?.email || '',
-  });
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        displayName: user.displayName || '',
+        email: user.email || '',
+      });
+    }
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     
     try {
       await updateProfile({ displayName: formData.displayName });
@@ -36,7 +47,17 @@ export default function ProfilePage() {
       setIsEditing(false);
     } catch (error: any) {
       toast.error(error.message || 'Failed to update profile');
+    } finally {
+      setIsSaving(false);
     }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      displayName: user?.displayName || '',
+      email: user?.email || '',
+    });
+    setIsEditing(false);
   };
 
   if (!isAuthenticated) {
@@ -60,13 +81,15 @@ export default function ProfilePage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Personal Information</CardTitle>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsEditing(!isEditing)}
-              >
-                {isEditing ? 'Cancel' : 'Edit'}
-              </Button>
+              {!isEditing && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </Button>
+              )}
             </div>
           </CardHeader>
           <CardContent>
@@ -92,11 +115,30 @@ export default function ProfilePage() {
               </div>
 
               {isEditing && (
-                <Button type="submit" className="w-full">
-                  Save Changes
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" disabled={isSaving}>
+                    {isSaving ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </div>
               )}
             </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-medium">Role</p>
+                <p className="text-sm text-muted-foreground">{user?.role}</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

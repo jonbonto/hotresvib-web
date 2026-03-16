@@ -90,11 +90,7 @@ export default function HotelsPage() {
                   <Button
                     variant="outline"
                     disabled={page === 0}
-                    onClick={() => {
-                      const newParams = new URLSearchParams(window.location.search);
-                      newParams.set('page', (page - 1).toString());
-                      window.location.href = `/hotels?${newParams.toString()}`;
-                    }}
+                    onClick={() => setPage(page - 1)}
                   >
                     Previous
                   </Button>
@@ -104,11 +100,7 @@ export default function HotelsPage() {
                   <Button
                     variant="outline"
                     disabled={page >= data.totalPages - 1}
-                    onClick={() => {
-                      const newParams = new URLSearchParams(window.location.search);
-                      newParams.set('page', (page + 1).toString());
-                      window.location.href = `/hotels?${newParams.toString()}`;
-                    }}
+                    onClick={() => setPage(page + 1)}
                   >
                     Next
                   </Button>

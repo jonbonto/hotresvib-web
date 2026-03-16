@@ -291,9 +291,13 @@ function ReservationsTab() {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="">All Statuses</option>
+            <option value="DRAFT">Draft</option>
             <option value="PENDING_PAYMENT">Pending Payment</option>
             <option value="CONFIRMED">Confirmed</option>
+            <option value="CHECKED_IN">Checked In</option>
+            <option value="CHECKED_OUT">Checked Out</option>
             <option value="CANCELLED">Cancelled</option>
+            <option value="REFUNDED">Refunded</option>
           </select>
         </div>
       </CardHeader>
@@ -314,24 +318,24 @@ function ReservationsTab() {
                   {res.status}
                 </Badge>
                 {res.status === 'CONFIRMED' && (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => checkInMutation.mutate(res.id)}
-                      disabled={checkInMutation.isPending}
-                    >
-                      <LogIn className="w-3 h-3 mr-1" /> Check In
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => checkOutMutation.mutate(res.id)}
-                      disabled={checkOutMutation.isPending}
-                    >
-                      <LogOut className="w-3 h-3 mr-1" /> Check Out
-                    </Button>
-                  </>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => checkInMutation.mutate(res.id)}
+                    disabled={checkInMutation.isPending}
+                  >
+                    <LogIn className="w-3 h-3 mr-1" /> Check In
+                  </Button>
+                )}
+                {res.status === 'CHECKED_IN' && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => checkOutMutation.mutate(res.id)}
+                    disabled={checkOutMutation.isPending}
+                  >
+                    <LogOut className="w-3 h-3 mr-1" /> Check Out
+                  </Button>
                 )}
               </div>
             </div>

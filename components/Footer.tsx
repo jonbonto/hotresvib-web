@@ -32,14 +32,10 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help" className="text-muted-foreground hover:text-foreground">
-                  Help Center
-                </Link>
+                <span className="text-muted-foreground">help@hotresvib.com</span>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground">
-                  Contact Us
-                </Link>
+                <span className="text-muted-foreground">+1 (800) 555-0199</span>
               </li>
             </ul>
           </div>
@@ -48,14 +44,10 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
-                  Privacy Policy
-                </Link>
+                <span className="text-muted-foreground">Privacy Policy</span>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground">
-                  Terms of Service
-                </Link>
+                <span className="text-muted-foreground">Terms of Service</span>
               </li>
             </ul>
           </div>

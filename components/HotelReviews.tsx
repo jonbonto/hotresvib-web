@@ -6,7 +6,7 @@ import { useAuth } from '@/lib/contexts/AuthContext';
 import { getHotelReviews, getHotelRating, createReview, deleteReview } from '@/lib/api/reviews';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
@@ -116,11 +116,12 @@ export function HotelReviews({ hotelId }: HotelReviewsProps) {
               </div>
               <div>
                 <Label htmlFor="comment">Comment (optional)</Label>
-                <Input
+                <Textarea
                   id="comment"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Share your experience..."
+                  rows={3}
                 />
               </div>
               <div className="flex gap-2">

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Room } from '@/lib/types/hotel';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { Button } from './ui/button';
-import { Users, Bed } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 interface RoomCardProps {
   room: Room;

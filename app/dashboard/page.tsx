@@ -25,7 +25,7 @@ export default function DashboardPage() {
 
   const { data: reservations, isLoading, refetch } = useQuery({
     queryKey: ['user-reservations', user?.id],
-    queryFn: () => getUserReservations(user?.id),
+    queryFn: () => getUserReservations(),
     enabled: isAuthenticated && !!user,
   });
 
@@ -85,8 +85,11 @@ export default function DashboardPage() {
                   <div className="text-right">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                       reservation.status === 'CONFIRMED' ? 'bg-green-100 text-green-800' :
+                      reservation.status === 'CHECKED_IN' ? 'bg-blue-100 text-blue-800' :
+                      reservation.status === 'CHECKED_OUT' ? 'bg-gray-100 text-gray-800' :
                       reservation.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                      'bg-blue-100 text-blue-800'
+                      reservation.status === 'REFUNDED' ? 'bg-orange-100 text-orange-800' :
+                      'bg-yellow-100 text-yellow-800'
                     }`}>
                       {reservation.status}
                     </span>

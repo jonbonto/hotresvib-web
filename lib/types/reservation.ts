@@ -2,6 +2,8 @@ export type ReservationStatus =
   | 'DRAFT' 
   | 'PENDING_PAYMENT' 
   | 'CONFIRMED' 
+  | 'CHECKED_IN'
+  | 'CHECKED_OUT'
   | 'CANCELLED' 
   | 'EXPIRED' 
   | 'REFUNDED';
