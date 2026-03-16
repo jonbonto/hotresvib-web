@@ -24,9 +24,9 @@ export async function getUserReservations(userId?: string): Promise<Reservation[
   return fetcher<Reservation[]>(url);
 }
 
-export async function cancelReservation(id: string): Promise<void> {
-  return fetcher<void>(`/reservations/${id}/cancel`, {
-    method: 'POST',
+export async function cancelReservation(id: string): Promise<Reservation> {
+  return fetcher<Reservation>(`/reservations/${id}`, {
+    method: 'DELETE',
   });
 }
 

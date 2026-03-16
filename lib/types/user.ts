@@ -4,7 +4,6 @@ export interface User {
   id: string;
   email: string;
   displayName: string;
-  name: string;
   role: UserRole;
 }
 
@@ -27,7 +26,12 @@ export interface RegisterFormData {
 }
 
 export interface AuthResponse {
-  accessToken?: string;
-  refreshToken?: string;
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
+export interface RegisterResponse {
+  message: string;
   user: User;
 }

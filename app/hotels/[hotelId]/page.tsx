@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getHotel } from '@/lib/api/hotels';
 import type { Hotel } from '@/lib/types/hotel';
 import { RoomList } from '@/components/RoomList';
+import { HotelReviews } from '@/components/HotelReviews';
 import { MapPin, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -34,7 +35,7 @@ export default async function HotelDetailsPage({
                 <span>{hotel.city}, {hotel.country}</span>
               </div>
             </div>
-            {hotel.isFeatured && (
+            {hotel.featured && (
               <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
                 <Star className="w-3 h-3 mr-1" />
                 Featured
@@ -58,25 +59,23 @@ export default async function HotelDetailsPage({
             <div>
               <h3 className="font-semibold mb-2">Address</h3>
               <p className="text-sm text-muted-foreground">
-                {hotel.address.street}<br />
-                {hotel.address.city}, {hotel.address.state}<br />
-                {hotel.address.country} {hotel.address.zipCode}
+                {hotel.address}
               </p>
             </div>
           )}
-          {hotel.contactInfo && (
+          {(hotel.phone || hotel.email) && (
             <div>
               <h3 className="font-semibold mb-2">Contact</h3>
               <p className="text-sm text-muted-foreground">
-                Phone: {hotel.contactInfo.phone}<br />
-                Email: {hotel.contactInfo.email}
+                {hotel.phone && <>Phone: {hotel.phone}<br /></>}
+                {hotel.email && <>Email: {hotel.email}</>}
               </p>
             </div>
           )}
           <div>
             <h3 className="font-semibold mb-2">Total Rooms</h3>
             <p className="text-sm text-muted-foreground">
-              {hotel.totalRooms || hotel.roomCount || 0} rooms available
+              {hotel.roomCount || 0} rooms available
             </p>
           </div>
         </div>
@@ -85,6 +84,11 @@ export default async function HotelDetailsPage({
         <div>
           <h2 className="text-3xl font-bold mb-6">Available Rooms</h2>
           <RoomList hotelId={hotelId} />
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <HotelReviews hotelId={hotelId} />
         </div>
       </div>
     </div>

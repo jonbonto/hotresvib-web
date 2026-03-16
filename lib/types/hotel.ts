@@ -5,20 +5,13 @@ export interface Hotel {
   country: string;
   roomCount?: number;
   minPrice?: number;
-  isFeatured: boolean;
+  featured: boolean;
   description?: string;
-  totalRooms?: number;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    country: string;
-    zipCode: string;
-  };
-  contactInfo?: {
-    phone: string;
-    email: string;
-  };
+  address?: string;
+  phone?: string;
+  email?: string;
+  starRating?: number;
+  imageUrl?: string;
 }
 
 export interface Room {
@@ -26,20 +19,19 @@ export interface Room {
   hotelId: string;
   number: string;
   type: 'SINGLE' | 'DOUBLE' | 'SUITE';
-  baseRate: number;
+  basePrice: number;
   currency: string;
   description?: string;
   capacity?: number;
-  bedType?: string;
-  amenities?: string[];
-  available?: number;
+  amenities?: string;
+  imageUrl?: string;
 }
 
 export interface RoomSearchResponse extends Room {
   hotelName: string;
   city: string;
   country: string;
-  isAvailable?: boolean;
+  available?: boolean;
 }
 
 export interface RoomAvailability extends Room {

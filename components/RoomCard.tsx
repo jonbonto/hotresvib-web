@@ -33,7 +33,7 @@ export function RoomCard({ room, hotelId, checkIn, checkOut }: RoomCardProps) {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold">${room.baseRate}</p>
+                <p className="text-2xl font-bold">${room.basePrice}</p>
                 <p className="text-sm text-muted-foreground">per night</p>
               </div>
             </div>
@@ -43,20 +43,16 @@ export function RoomCard({ room, hotelId, checkIn, checkOut }: RoomCardProps) {
                 <Users className="w-4 h-4" />
                 <span>Max {room.capacity} guests</span>
               </div>
-              <div className="flex items-center gap-1">
-                <Bed className="w-4 h-4" />
-                <span>{room.bedType}</span>
-              </div>
             </div>
 
             {room.amenities && room.amenities.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {room.amenities.map((amenity, index) => (
+                {room.amenities.split(',').map((amenity, index) => (
                   <span 
                     key={index}
                     className="px-2 py-1 bg-muted rounded text-xs"
                   >
-                    {amenity}
+                    {amenity.trim()}
                   </span>
                 ))}
               </div>
@@ -67,23 +63,10 @@ export function RoomCard({ room, hotelId, checkIn, checkOut }: RoomCardProps) {
       
       <CardFooter className="bg-muted/30 px-6 py-4">
         <div className="flex items-center justify-between w-full">
-          <div className="text-sm text-muted-foreground">
-            {room.available !== undefined && room.available > 0 ? (
-              <span className="text-green-600 font-medium">
-                {room.available} rooms available
-              </span>
-            ) : (
-              <span className="text-red-600 font-medium">
-                No availability
-              </span>
-            )}
-          </div>
           <Link 
             href={`/hotels/${hotelId}/rooms/${room.id}?${bookingParams.toString()}`}
           >
-            <Button disabled={!room.available || room.available === 0}>
-              {room.available && room.available > 0 ? 'Book Now' : 'Unavailable'}
-            </Button>
+            <Button>Book Now</Button>
           </Link>
         </div>
       </CardFooter>

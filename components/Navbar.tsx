@@ -42,6 +42,11 @@ export function Navbar() {
                   <DropdownMenuItem asChild>
                     <Link href="/profile">Profile</Link>
                   </DropdownMenuItem>
+                  {user?.role === 'ADMIN' && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin">Admin Panel</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout

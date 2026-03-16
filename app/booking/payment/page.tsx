@@ -71,15 +71,11 @@ export default function PaymentPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Check-in</span>
-                <span>{format(new Date(reservation.checkInDate ?? reservation.startDate!), 'MMM dd, yyyy')}</span>
+                <span>{format(new Date(reservation.startDate), 'MMM dd, yyyy')}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Check-out</span>
-                <span>{format(new Date(reservation.checkOutDate ?? reservation.endDate!), 'MMM dd, yyyy')}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Guests</span>
-                <span>{reservation.guestCount ?? 1}</span>
+                <span>{format(new Date(reservation.endDate), 'MMM dd, yyyy')}</span>
               </div>
               <div className="border-t pt-3 flex justify-between font-bold text-lg">
                 <span>Total Amount</span>

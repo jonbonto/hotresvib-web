@@ -10,16 +10,10 @@ export interface Reservation {
   id: string;
   userId: string;
   roomId: string;
-  // API may return either `checkInDate`/`checkOutDate` or `startDate`/`endDate`
-  checkInDate?: string;
-  checkOutDate?: string;
-  startDate?: string;
-  endDate?: string;
-  guestCount?: number;
+  startDate: string;
+  endDate: string;
   status: ReservationStatus;
   totalPrice: number;
-  currency: string;
-  specialRequests?: string;
   createdAt: string;
 }
 
@@ -27,8 +21,6 @@ export interface CreateReservationRequest {
   roomId: string;
   checkInDate: string;
   checkOutDate: string;
-  guestCount: number;
-  specialRequests?: string;
 }
 
 export interface PaymentIntentRequest {

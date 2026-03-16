@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { User } from 'lucide-react';
+import { updateProfile } from '@/lib/api/auth';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -22,17 +23,20 @@ export default function ProfilePage() {
   }, [isAuthenticated, router]);
 
   const [formData, setFormData] = useState({
-    name: user?.name || '',
+    displayName: user?.displayName || '',
     email: user?.email || '',
-    phone: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // TODO: Implement profile update API call
-    toast.success('Profile updated successfully');
-    setIsEditing(false);
+    try {
+      await updateProfile({ displayName: formData.displayName });
+      toast.success('Profile updated successfully');
+      setIsEditing(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update profile');
+    }
   };
 
   if (!isAuthenticated) {
@@ -47,7 +51,7 @@ export default function ProfilePage() {
             <User className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">{user?.name}</h1>
+            <h1 className="text-3xl font-bold">{user?.displayName}</h1>
             <p className="text-muted-foreground">{user?.email}</p>
           </div>
         </div>
@@ -68,11 +72,11 @@ export default function ProfilePage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="displayName">Display Name</Label>
                 <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  id="displayName"
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                   disabled={!isEditing}
                 />
               </div>
@@ -83,20 +87,7 @@ export default function ProfilePage() {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  disabled={!isEditing}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  disabled={!isEditing}
-                  placeholder="Optional"
+                  disabled
                 />
               </div>
 
@@ -105,46 +96,6 @@ export default function ProfilePage() {
                   Save Changes
                 </Button>
               )}
-            </form>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4">
-              <div>
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <Input
-                  id="currentPassword"
-                  type="password"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="confirmNewPassword">Confirm New Password</Label>
-                <Input
-                  id="confirmNewPassword"
-                  type="password"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <Button type="button" onClick={() => toast.info('Password change not implemented yet')}>
-                Update Password
-              </Button>
             </form>
           </CardContent>
         </Card>

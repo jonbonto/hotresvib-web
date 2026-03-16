@@ -8,7 +8,7 @@ import { BookingForm } from '@/components/BookingForm';
 import { Room } from '@/lib/types/hotel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Bed, Calendar } from 'lucide-react';
+import { Users, Calendar } from 'lucide-react';
 
 export default function RoomBookingPage() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function RoomBookingPage() {
       return;
     }
 
-    getRoomById(roomId)
+    getRoomById(roomId, hotelId)
       .then(setRoom)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -85,24 +85,17 @@ export default function RoomBookingPage() {
                     <p className="font-medium">{room.capacity} guests</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Bed className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Bed Type</p>
-                    <p className="font-medium">{room.bedType}</p>
-                  </div>
-                </div>
               </div>
 
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Amenities</p>
                 <div className="flex flex-wrap gap-2">
-                  {room.amenities?.map((amenity, index) => (
+                  {room.amenities?.split(',').map((amenity, index) => (
                     <span 
                       key={index}
                       className="px-3 py-1 bg-muted rounded-full text-sm"
                     >
-                      {amenity}
+                      {amenity.trim()}
                     </span>
                   ))}
                 </div>
@@ -111,7 +104,7 @@ export default function RoomBookingPage() {
               <div className="pt-4 border-t">
                 <div className="flex justify-between items-center">
                   <span className="text-lg">Base Rate</span>
-                  <span className="text-2xl font-bold">${room.baseRate}/night</span>
+                  <span className="text-2xl font-bold">${room.basePrice}/night</span>
                 </div>
               </div>
             </CardContent>
@@ -133,7 +126,7 @@ export default function RoomBookingPage() {
                 hotelId={hotelId ?? ''}
                 defaultCheckIn={checkIn}
                 defaultCheckOut={checkOut}
-                baseRate={room.baseRate}
+                basePrice={room.basePrice}
               />
             </CardContent>
           </Card>

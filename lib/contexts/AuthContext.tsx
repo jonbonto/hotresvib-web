@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, LoginRequest, RegisterRequest } from '../types/user';
+import { User, LoginRequest, RegisterRequest, RegisterResponse } from '../types/user';
 import * as authApi from '../api/auth';
 import { toast } from 'sonner';
 
@@ -38,7 +38,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (data: LoginRequest) => {
     try {
       const response = await authApi.login(data);
-      localStorage.setItem('token', response.accessToken ?? '');
+      localStorage.setItem('token', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
       setUser(response.user);
       toast.success('Logged in successfully!');
     } catch (error) {
@@ -49,9 +50,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (data: RegisterRequest) => {
     try {
-      const response = await authApi.register(data);
-      localStorage.setItem('token', response.accessToken ?? '');
-      setUser(response.user);
+      await authApi.register(data);
+      // Backend returns RegisterResponse (no tokens) - auto-login after registration
+      const loginResponse = await authApi.login({ email: data.email, password: data.password });
+      localStorage.setItem('token', loginResponse.accessToken);
+      localStorage.setItem('refreshToken', loginResponse.refreshToken);
+      setUser(loginResponse.user);
       toast.success('Account created successfully!');
     } catch (error) {
       toast.error('Registration failed. Please try again.');
@@ -61,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setUser(null);
     toast.success('Logged out successfully');
   };

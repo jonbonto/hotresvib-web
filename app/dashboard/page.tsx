@@ -52,7 +52,7 @@ export default function DashboardPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">My Bookings</h1>
         <p className="text-muted-foreground">
-          Welcome back, {user?.name || 'Guest'}
+          Welcome back, {user?.displayName || 'Guest'}
         </p>
       </div>
 
@@ -76,13 +76,9 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         <span>
-                            {format(new Date(reservation.checkInDate ?? reservation.startDate!), 'MMM dd')} -{' '}
-                            {format(new Date(reservation.checkOutDate ?? reservation.endDate!), 'MMM dd, yyyy')}
+                            {format(new Date(reservation.startDate), 'MMM dd')} -{' '}
+                            {format(new Date(reservation.endDate), 'MMM dd, yyyy')}
                           </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        <span>{reservation.guestCount ?? 1} guests</span>
                       </div>
                     </div>
                   </div>
@@ -99,11 +95,6 @@ export default function DashboardPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                {reservation.specialRequests && (
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Special Requests: {reservation.specialRequests}
-                  </p>
-                )}
                 <div className="flex gap-2">
                   {reservation.status === 'DRAFT' && (
                     <Button

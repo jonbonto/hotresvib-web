@@ -35,8 +35,19 @@ export async function getHotel(id: string): Promise<Hotel> {
   return fetcher<Hotel>(`/hotels/${id}`);
 }
 
-export async function getRoomById(roomId: string): Promise<Room> {
-  return fetcher<Room>(`/rooms/${roomId}`);
+export async function getHotelRooms(hotelId: string): Promise<Room[]> {
+  return fetcher<Room[]>(`/hotels/${hotelId}/rooms`);
+}
+
+export async function getRoomById(roomId: string, hotelId?: string): Promise<Room> {
+  if (hotelId) {
+    const rooms = await getHotelRooms(hotelId);
+    const room = rooms.find(r => r.id === roomId);
+    if (!room) throw new Error('Room not found');
+    return room;
+  }
+  // Fallback: search all hotels (less efficient)
+  throw new Error('hotelId is required to fetch room details');
 }
 
 export async function searchRooms(criteria: RoomSearchCriteria): Promise<PaginatedResponse<RoomSearchResponse>> {

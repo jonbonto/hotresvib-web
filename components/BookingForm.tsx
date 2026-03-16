@@ -11,13 +11,10 @@ import { createReservation } from '@/lib/api/reservations';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 
 const bookingSchema = z.object({
   checkInDate: z.string().min(1, 'Check-in date is required'),
   checkOutDate: z.string().min(1, 'Check-out date is required'),
-  guestCount: z.number().min(1).max(10),
-  specialRequests: z.string().optional(),
 }).refine((data) => {
   const checkIn = new Date(data.checkInDate);
   const checkOut = new Date(data.checkOutDate);
@@ -34,7 +31,7 @@ interface BookingFormProps {
   hotelId: string;
   defaultCheckIn?: string;
   defaultCheckOut?: string;
-  baseRate: number;
+  basePrice: number;
 }
 
 export function BookingForm({
@@ -42,7 +39,7 @@ export function BookingForm({
   hotelId,
   defaultCheckIn,
   defaultCheckOut,
-  baseRate,
+  basePrice,
 }: BookingFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,8 +55,6 @@ export function BookingForm({
     defaultValues: {
       checkInDate: defaultCheckIn || '',
       checkOutDate: defaultCheckOut || '',
-      guestCount: 2,
-      specialRequests: '',
     },
   });
 
@@ -70,7 +65,7 @@ export function BookingForm({
   const nights = checkInDate && checkOutDate 
     ? differenceInDays(new Date(checkOutDate), new Date(checkInDate))
     : 0;
-  const estimatedTotal = nights > 0 ? nights * baseRate : 0;
+  const estimatedTotal = nights > 0 ? nights * basePrice : 0;
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
@@ -80,8 +75,6 @@ export function BookingForm({
         roomId,
         checkInDate: data.checkInDate,
         checkOutDate: data.checkOutDate,
-        guestCount: data.guestCount,
-        specialRequests: data.specialRequests,
       });
 
       toast.success('Reservation created! Proceeding to payment...');
@@ -125,35 +118,11 @@ export function BookingForm({
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="guestCount">Number of Guests</Label>
-        <Input
-          id="guestCount"
-          type="number"
-          min={1}
-          max={10}
-          {...register('guestCount', { valueAsNumber: true })}
-        />
-        {errors.guestCount && (
-          <p className="text-sm text-red-500 mt-1">{errors.guestCount.message}</p>
-        )}
-      </div>
-
-      <div>
-        <Label htmlFor="specialRequests">Special Requests (Optional)</Label>
-        <Textarea
-          id="specialRequests"
-          {...register('specialRequests')}
-          placeholder="Any special requests or preferences..."
-          rows={3}
-        />
-      </div>
-
       {nights > 0 && (
         <div className="bg-muted p-4 rounded-lg space-y-2">
           <div className="flex justify-between text-sm">
             <span>Base rate per night</span>
-            <span>${baseRate}</span>
+            <span>${basePrice}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Number of nights</span>

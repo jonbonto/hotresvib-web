@@ -57,15 +57,11 @@ export default function ConfirmationClient() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Check-in</span>
-              <span>{format(new Date(reservation.checkInDate ?? reservation.startDate!), 'EEEE, MMMM dd, yyyy')}</span>
+              <span>{format(new Date(reservation.startDate), 'EEEE, MMMM dd, yyyy')}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Check-out</span>
-              <span>{format(new Date(reservation.checkOutDate ?? reservation.endDate!), 'EEEE, MMMM dd, yyyy')}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Guests</span>
-              <span>{reservation.guestCount ?? 1}</span>
+              <span>{format(new Date(reservation.endDate), 'EEEE, MMMM dd, yyyy')}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Status</span>
@@ -73,12 +69,6 @@ export default function ConfirmationClient() {
                 {reservation.status}
               </span>
             </div>
-            {reservation.specialRequests && (
-              <div>
-                <span className="text-muted-foreground block mb-1">Special Requests</span>
-                <p className="text-sm">{reservation.specialRequests}</p>
-              </div>
-            )}
             <div className="border-t pt-3 flex justify-between font-bold text-lg">
               <span>Total Paid</span>
               <span>${reservation.totalPrice}</span>
